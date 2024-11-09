@@ -1,4 +1,3 @@
-import RichEditor from "../testArea/RichEditor";
 import SearchBar from "./SearchBar";
 import TaskCard from "./TaskCard";
 import TaskModal from "./TaskModal";
@@ -11,7 +10,6 @@ const ContentArea = () => {
       ))}
       <TaskCard />
       <TaskModal />
-      <RichEditor />
     </div>
   );
 };
