@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import "easymde/dist/easymde.min.css";
+import { useState } from "react";
 import { MdCancelPresentation } from "react-icons/md";
 import SimpleMDE from "react-simplemde-editor";
-import "easymde/dist/easymde.min.css";
 
 interface AddTaskFormFields extends HTMLFormControlsCollection {
   taskHeading: HTMLInputElement;
@@ -12,9 +12,12 @@ interface AddTaskFormElements extends HTMLFormElement {
   readonly elements: AddTaskFormFields;
 }
 
-const TaskModal = () => {
-  const [isVisible, setVisibility] = useState(true);
+interface Props {
+  isVisible: boolean;
+  toggleVisibility: () => void;
+}
 
+const TaskModal = ({ isVisible, toggleVisibility }: Props) => {
   const submitHanlder = (e: React.FormEvent<AddTaskFormElements>) => {
     e.preventDefault();
 
@@ -29,7 +32,7 @@ const TaskModal = () => {
     console.log("content: ", content);
 
     // e.currentTarget.reset(); // our simpleMDE content does not reset.
-    setVisibility(false);
+    toggleVisibility();
   };
 
   return (
@@ -62,7 +65,7 @@ const TaskModal = () => {
 
       <button
         className="absolute top-1 right-2 hover:shadow-sm"
-        onClick={() => setVisibility(!isVisible)}
+        onClick={toggleVisibility}
       >
         <MdCancelPresentation size="1.5rem" />
       </button>
