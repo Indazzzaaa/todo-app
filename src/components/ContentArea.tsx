@@ -2,22 +2,21 @@ import { useState } from "react";
 import SearchBar from "./SearchBar";
 import TaskCard from "./TaskCard";
 import TaskModal from "./TaskModal";
+import { getAllTasks } from "../utils/task_api";
 const ContentArea = () => {
-  const [isVisible, setVisibility] = useState(true);
+  const [isVisible, setVisibility] = useState(false);
+  const allTasks = getAllTasks();
 
   const toggleModel = () => {
-    console.log("Closing the model");
-
     setVisibility(!isVisible);
   };
 
   return (
-    <div className=" flex flex-col mt-4">
-      <SearchBar toogleModel={toggleModel}/>
-      {Array.from({ length: 5 }, (_, i) => (
-        <TaskCard key={i} />
+    <div className=" flex flex-col mt-4 items-center">
+      <SearchBar toogleModel={toggleModel} />
+      {allTasks.map((curr) => (
+        <TaskCard task={curr} key={curr.id} />
       ))}
-      <TaskCard />
       <TaskModal isVisible={isVisible} toggleVisibility={toggleModel} />
     </div>
   );

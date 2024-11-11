@@ -1,7 +1,8 @@
 import "easymde/dist/easymde.min.css";
-import { useState } from "react";
 import { MdCancelPresentation } from "react-icons/md";
-import SimpleMDE from "react-simplemde-editor";
+import { SimpleMdeReact } from "react-simplemde-editor";
+import { createTask } from "../utils/task_api";
+import { useCallback, useRef, useState } from "react";
 
 interface AddTaskFormFields extends HTMLFormControlsCollection {
   taskHeading: HTMLInputElement;
@@ -18,6 +19,8 @@ interface Props {
 }
 
 const TaskModal = ({ isVisible, toggleVisibility }: Props) => {
+  const [mdeValue, setmdeValue] = useState<string>("");
+
   const submitHanlder = (e: React.FormEvent<AddTaskFormElements>) => {
     e.preventDefault();
 
@@ -27,13 +30,26 @@ const TaskModal = ({ isVisible, toggleVisibility }: Props) => {
 
     console.log("->> Loging the form submit");
 
-    console.log(elements);
+    // console.log(elements);
     console.log("Title: ", title);
     console.log("content: ", content);
 
-    // e.currentTarget.reset(); // our simpleMDE content does not reset.
+    //  Update the tasks api
+    createTask({ heading: title, content: content });
+
+    e.currentTarget.reset();
+    // to reset the data of our simpleMDE.
+    setmdeValue("");
     toggleVisibility();
   };
+
+  console.log("Re-render task model");
+
+  const onChange = useCallback((value: string) => {
+    console.log("->> New: ", value);
+
+    setmdeValue(value);
+  }, []);
 
   return (
     <div
@@ -48,11 +64,12 @@ const TaskModal = ({ isVisible, toggleVisibility }: Props) => {
           placeholder="Task Heading...."
           className="flex-1 bg-transparent placeholder-gray-100  rounded-md px-2 outline-none border leading-loose font-bold hover:shadow-md transition-all duration-300"
         />
-        <SimpleMDE
+        <SimpleMdeReact
           id="taskContent"
           className="custom-editor-bg w-auto"
           placeholder="Task Description ..."
-          onReset={() => ""}
+          value={mdeValue}
+          onChange={onChange}
         />
 
         <button

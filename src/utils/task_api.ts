@@ -1,8 +1,8 @@
-interface Task {
-  id: number;
+export interface Task {
+  id?: number;
   heading: string;
   content: string;
-  createdAt: Date;
+  createdAt?: Date;
   completedAt?: Date;
 }
 
